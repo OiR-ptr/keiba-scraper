@@ -50,6 +50,7 @@ function App() {
             React Redux
           </a>
         </span>
+        <h2>{process.env.REACT_APP_HASURA_API_KEY}</h2>
       </header>
     </div>
   );
