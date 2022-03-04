@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
+import scraperReducer from '../features/scraper/scraperSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+    scraper: scraperReducer,
   },
 });
 

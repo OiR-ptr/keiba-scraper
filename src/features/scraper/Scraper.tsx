@@ -1,23 +1,26 @@
 import React from 'react';
-import { Button, TextField } from '@mui/material';
-import GetAppIcon from '@mui/icons-material/GetApp';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { Container } from '@mui/material';
+import { Home } from './Home';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectMenu } from './scraperSlice';
 
 export function Scraper() {
-  const [raceUrl, setRaceUrl] = React.useState('');
+  const menu = useAppSelector(selectMenu);
   const dispatch = useAppDispatch();
 
-  const fetchFromNetKeiba = (url : string) => {
-    console.log(url);
-  };
+  function SelectDisplayComponent() {
+    switch(menu) {
+      case 'home':    return <Home />;
+      case 'edit':    return <div>EDIT!!!</div>;
+      case 'delete':  return <div>DELETE!!!</div>
+      case 'add':     return <div>ADDDDD</div>;
+    }
+    return <div>ERROR!!!!</div>;
+  }
 
   return (
-    <div>
-      <TextField fullWidth id="race_id" label="race_id" variant="outlined" value={raceUrl} 
-        onChange={(e) => setRaceUrl(e.target.value)}
-        placeholder='https://race.netkeiba.com/race/shutuba.html?race_id=XXXXXX' />
-      <Button variant="outlined" endIcon={<GetAppIcon />} 
-        onClick={(e) => fetchFromNetKeiba(raceUrl)}>Fetch</Button>
-    </div>
+    <Container maxWidth="lg">
+      {SelectDisplayComponent()}
+    </Container>
   );
 }
