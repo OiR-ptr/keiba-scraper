@@ -2,17 +2,18 @@ import React from 'react';
 import { Container } from '@mui/material';
 import { Home } from './Home';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectMenu } from './scraperSlice';
+import { selectMenu, selectTargetId } from './scraperSlice';
 
 export function Scraper() {
   const menu = useAppSelector(selectMenu);
+  const target = useAppSelector(selectTargetId);
   const dispatch = useAppDispatch();
 
   function SelectDisplayComponent() {
     switch(menu) {
       case 'home':    return <Home />;
-      case 'edit':    return <div>EDIT!!!</div>;
-      case 'delete':  return <div>DELETE!!!</div>
+      case 'edit':    return <div>EDIT!!! {target}</div>;
+      case 'delete':  return <div>DELETE!!! {target}</div>
       case 'add':     return <div>ADDDDD</div>;
     }
     return <div>ERROR!!!!</div>;

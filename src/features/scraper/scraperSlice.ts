@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
 
-type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
+export type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
 
 interface Track {
   id: number,
@@ -21,12 +21,14 @@ interface Race {
 
 interface ScraperState {
   menu: ScraperMenu,
+  targetId: number,
   races: Race[],
   value: number,
 }
 
 const initialState: ScraperState = {
   menu: 'home',
+  targetId: NaN,
   races: [{ 
     id: 0,
     baba: "",
@@ -59,15 +61,21 @@ export const scraperSlice = createSlice({
   name: 'scraper',
   initialState,
   reducers: {
-    switchMode: (state, action: PayloadAction<ScraperMenu>) => {
-      state.menu = action.payload;
+    toEdit: (state, action: PayloadAction<number>) => {
+      state.menu = 'edit';
+      state.targetId = action.payload;
     },
+    toDelete: (state, action: PayloadAction<number>) => {
+      state.menu = 'delete';
+      state.targetId = action.payload;
+    }
   },
 });
 
-export const { switchMode } = scraperSlice.actions;
+export const { toEdit, toDelete } = scraperSlice.actions;
 
 export const selectMenu = (state: RootState) => state.scraper.menu;
+export const selectTargetId = (state: RootState) => state.scraper.targetId;
 export const selectRaces = (state: RootState) => state.scraper.races;
 
 export default scraperSlice.reducer;
