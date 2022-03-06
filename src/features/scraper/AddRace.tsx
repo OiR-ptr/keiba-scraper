@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { AddHorseJson } from './AddHorseJson';
 import { AddRaceJson } from './AddRaceJson';
-import { PrepareSnipet } from './PrepareSnipet';
+import { PrepareSnippet } from './PrepareSnippet';
 import { toHome } from './scraperSlice';
 
 export function AddRace() {
@@ -50,7 +50,7 @@ export function AddRace() {
       {
         steps[activeStep] === 'PREPARE' && (
           <>
-            <PrepareSnipet />
+            <PrepareSnippet />
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button sx={{ mr: 1 }} onClick={e => handleBack()}>Cancel</Button>
               <Box sx={{ flex: '1 1 auto' }} />

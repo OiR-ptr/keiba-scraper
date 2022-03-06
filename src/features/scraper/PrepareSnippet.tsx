@@ -5,7 +5,7 @@ import shutubaSnippet from '../../_media/list.snippet';
 import profileSnippet from '../../_media/profile.snippet';
 import cat from '../../_media/catgif.gif';
 
-export function PrepareSnipet() {
+export function PrepareSnippet() {
   const [list, setList] = useState('');
   const [profile, setProfile] = useState('');
 
