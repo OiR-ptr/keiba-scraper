@@ -53,6 +53,18 @@ const initialState: ScraperState = {
       comment: "",
       turf_comment: "芝荒れてるかもw",
     }
+  }, { 
+    id: 2,
+    baba: "馬場:良",
+    course: "芝2000m (右)",
+    name: "弥生賞ディープインパクト記念",
+    weather: "天候:晴",
+    track: {
+      id: 2,
+      name: "中山",
+      comment: "",
+      turf_comment: "芝荒れてるかもw",
+    }
   }],
   value: 0,
 }
@@ -61,6 +73,10 @@ export const scraperSlice = createSlice({
   name: 'scraper',
   initialState,
   reducers: {
+    toHome: (state) => {
+      state.menu = 'home';
+      state.targetId = NaN;
+    },
     toEdit: (state, action: PayloadAction<number>) => {
       state.menu = 'edit';
       state.targetId = action.payload;
@@ -76,7 +92,7 @@ export const scraperSlice = createSlice({
   },
 });
 
-export const { toEdit, toDelete, toAdd } = scraperSlice.actions;
+export const { toHome, toEdit, toDelete, toAdd } = scraperSlice.actions;
 
 export const selectMenu = (state: RootState) => state.scraper.menu;
 export const selectTargetId = (state: RootState) => state.scraper.targetId;
