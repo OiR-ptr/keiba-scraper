@@ -68,11 +68,15 @@ export const scraperSlice = createSlice({
     toDelete: (state, action: PayloadAction<number>) => {
       state.menu = 'delete';
       state.targetId = action.payload;
+    },
+    toAdd: (state) => {
+      state.menu = 'add';
+      state.targetId = NaN;
     }
   },
 });
 
-export const { toEdit, toDelete } = scraperSlice.actions;
+export const { toEdit, toDelete, toAdd } = scraperSlice.actions;
 
 export const selectMenu = (state: RootState) => state.scraper.menu;
 export const selectTargetId = (state: RootState) => state.scraper.targetId;
