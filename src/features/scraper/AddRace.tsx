@@ -1,13 +1,16 @@
 import { Box, Button, Step, StepLabel, Stepper } from '@mui/material';
 import React, { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
+import { AddHorseJson } from './AddHorseJson';
+import { AddRaceJson } from './AddRaceJson';
+import { PrepareSnipet } from './PrepareSnipet';
 import { toHome } from './scraperSlice';
 
 export function AddRace() {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
 
-  const steps = ['RACE', 'HORSES'];
+  const steps = ['PREPARE', 'RACE', 'HORSES'];
 
   function backToHome() {
     setActiveStep(0);
@@ -45,9 +48,9 @@ export function AddRace() {
       </Stepper>
 
       {
-        steps[activeStep] === 'RACE' && (
+        steps[activeStep] === 'PREPARE' && (
           <>
-            <div>aiueo</div>
+            <PrepareSnipet />
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button sx={{ mr: 1 }} onClick={e => handleBack()}>Cancel</Button>
               <Box sx={{ flex: '1 1 auto' }} />
@@ -57,9 +60,21 @@ export function AddRace() {
         )
       }
       {
+        steps[activeStep] === 'RACE' && (
+          <>
+            <AddRaceJson />
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Button sx={{ mr: 1 }} onClick={e => handleBack()}>Back</Button>
+              <Box sx={{ flex: '1 1 auto' }} />
+              <Button onClick={e => handleNext()}>Next</Button>
+            </Box>
+          </>
+        )
+      }
+      {
         steps[activeStep] === 'HORSES' && (
           <>
-            <div>abcdefghijklmnopqrstuvwxyz</div>
+            <AddHorseJson />
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button onClick={e => handleBack()} sx={{ mr: 1 }}>Back</Button>
               <Box sx={{ flex: '1 1 auto' }} />

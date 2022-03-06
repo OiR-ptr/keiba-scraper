@@ -1,0 +1,29 @@
+const raceName = document.querySelector('div.RaceName').innerText.trim();
+const attributes = document.querySelector('div.RaceData01').innerText.split('/').map(i => i.trim());
+const raceTrack = document.querySelector('div.RaceKaisaiWrap li.Active').innerText;
+
+const horseList = [...document.querySelectorAll('table.Shutuba_Table tr.HorseList')].map(e => {
+    return Array.from(e.cells).reduce( (previous, value) => {
+        previous[value.className] = value.innerText;
+        return previous;
+    }, {});
+});
+
+const hrefs = [...document.querySelectorAll('table.Shutuba_Table .HorseName a')].map(e => {
+    return { name: e.innerText, href: e.href };
+});
+
+const horses = horseList.reduce((previous, horse, idx) => {
+    const hit = hrefs.find(e => e.name == horse.HorseInfo);
+    previous.push(Object.assign({}, horse, {href: hit.href}));
+    return previous;
+}, []);
+
+copy(Object.assign({}, { 
+    raceName, 
+    raceTrack, 
+    course: attributes[1], 
+    weather: attributes[2], 
+    baba: attributes[3],
+    horses
+}));

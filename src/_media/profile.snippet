@@ -1,0 +1,27 @@
+const horseName = [...document.querySelectorAll('div.horse_title > h1')].reduce((previous, value) => {
+    return previous+value.innerText;
+}, "").trim();
+
+const horseSire = [...document.querySelectorAll('table.blood_table tr > td.b_ml')].reduce((previous, horseBlood) => {
+  if(horseBlood?.nextElementSibling) previous['sire'] = horseBlood.innerText;
+  if(horseBlood?.previousElementSibling?.className == 'b_fml') previous['broodmare_sire'] = horseBlood.innerText;
+  return previous;
+}, {});
+
+const theads = [...document.querySelectorAll('table.db_h_race_results thead th')].map(th => {
+    return th.innerText.replaceAll('\n', '');
+});
+
+const races = [...document.querySelectorAll('table.db_h_race_results tbody tr')].map(tr => {
+    return [...tr.children].reduce((previous, record, idx) => {
+        previous[theads[idx]] = record.innerText;
+        return previous;
+    }, {});
+})
+
+copy(Object.assign({
+}, {
+    name: horseName
+}, horseSire, {
+    races
+}));
