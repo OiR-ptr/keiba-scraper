@@ -1,6 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import React, { useMemo, useState } from 'react';
-import cat from '../../_media/catgif.gif';
+import runSnippetGif from '../../_media/runSnippet.gif';
 
 type Props = {
   onError?: VoidFunction,
@@ -23,7 +23,7 @@ export function AddRaceJson(props: Props) {
   
   return (
     <Box sx={{ width: '100%' }}>
-      <img src={cat} />
+      <img src={runSnippetGif} alt='sorry, please run list snippet and paste this page' />
       <TextField
           error={hasJsonError}
           onChange={e => setShutubaJson(e.target.value)}
