@@ -8,6 +8,7 @@ import { toHome } from './scraperSlice';
 
 export function AddRace() {
   const [activeStep, setActiveStep] = useState(0);
+  const [hasRaceStepError, setHasRaceStepError] = useState(false);
   const dispatch = useAppDispatch();
 
   const steps = ['PREPARE', 'RACE', 'HORSES'];
@@ -62,11 +63,11 @@ export function AddRace() {
       {
         steps[activeStep] === 'RACE' && (
           <>
-            <AddRaceJson />
+            <AddRaceJson onError={() => setHasRaceStepError(true)} onOk={() => setHasRaceStepError(false)} />
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button sx={{ mr: 1 }} onClick={e => handleBack()}>Back</Button>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={e => handleNext()}>Next</Button>
+              <Button disabled={hasRaceStepError} onClick={e => handleNext()}>Next</Button>
             </Box>
           </>
         )

@@ -3,14 +3,14 @@ import { RootState, AppThunk } from "../../app/store";
 
 export type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
 
-interface Track {
+export interface Track {
   id: number,
   name: string,
   comment: string,
   turf_comment: string,
 }
 
-interface Race {
+export interface Race {
   id: number,
   name: string,
   course: string,
@@ -19,11 +19,35 @@ interface Race {
   track: Track,
 }
 
-interface ScraperState {
+export interface Adding {
+  raceJson: string,
+  horsesJson: string[],
+}
+
+export interface ScraperState {
   menu: ScraperMenu,
   targetId: number,
   races: Race[],
   value: number,
+  adding: Adding,
+}
+
+export interface EntryHorse {
+  Waku_Txt_C: string,
+  Umaban_Txt_C: string,
+  HorseInfo: string,
+  Barei_Txt_C: string,
+  Txt_C: string,
+  Jockey: string,
+  Weight: string,
+  href: string,
+}
+
+export interface RaceJson {
+  raceName: string,
+  raceTrack: string,
+  course: string,
+  horses: EntryHorse[],
 }
 
 const initialState: ScraperState = {
@@ -67,6 +91,10 @@ const initialState: ScraperState = {
     }
   }],
   value: 0,
+  adding: {
+    raceJson: '',
+    horsesJson: [],
+  },
 }
 
 export const scraperSlice = createSlice({
@@ -88,14 +116,18 @@ export const scraperSlice = createSlice({
     toAdd: (state) => {
       state.menu = 'add';
       state.targetId = NaN;
+    },
+    updateRaceJson: (state, action: PayloadAction<string>) => {
+      state.adding.raceJson = action.payload;
     }
   },
 });
 
-export const { toHome, toEdit, toDelete, toAdd } = scraperSlice.actions;
+export const { toHome, toEdit, toDelete, toAdd, updateRaceJson } = scraperSlice.actions;
 
 export const selectMenu = (state: RootState) => state.scraper.menu;
 export const selectTargetId = (state: RootState) => state.scraper.targetId;
 export const selectRaces = (state: RootState) => state.scraper.races;
+export const selectAdding = (state: RootState) => state.scraper.adding;
 
 export default scraperSlice.reducer;
