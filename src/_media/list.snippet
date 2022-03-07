@@ -4,7 +4,9 @@ const raceTrack = document.querySelector('div.RaceKaisaiWrap li.Active').innerTe
 
 const horseList = [...document.querySelectorAll('table.Shutuba_Table tr.HorseList')].map(e => {
     return Array.from(e.cells).reduce( (previous, value) => {
-        previous[value.className] = value.innerText;
+        const regex = /[\s0-9]+/g;
+        const propName = value.className.replaceAll(regex, '_');
+        previous[propName] = value.innerText;
         return previous;
     }, {});
 });
