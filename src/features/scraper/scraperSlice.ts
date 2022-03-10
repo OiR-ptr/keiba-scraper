@@ -119,11 +119,18 @@ export const scraperSlice = createSlice({
     },
     updateRaceJson: (state, action: PayloadAction<string>) => {
       state.adding.raceJson = action.payload;
+    },
+    addHorseJson: (state, action: PayloadAction<string>) => {
+      state.adding.horsesJson = [...state.adding.horsesJson, action.payload]
     }
   },
 });
 
-export const { toHome, toEdit, toDelete, toAdd, updateRaceJson } = scraperSlice.actions;
+export const { 
+  toHome, toEdit, toDelete, toAdd, 
+  updateRaceJson,
+  addHorseJson,
+} = scraperSlice.actions;
 
 export const selectMenu = (state: RootState) => state.scraper.menu;
 export const selectTargetId = (state: RootState) => state.scraper.targetId;
