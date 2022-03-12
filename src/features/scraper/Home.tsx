@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectRaces, toAdd, toDelete, toEdit } from './scraperSlice';
+import { fetchCurrentRaces, selectRaces, toAdd, toDelete, toEdit } from './scraperSlice';
 
 export function Home() {
   const races = useAppSelector(selectRaces);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCurrentRaces());
+  }, []);
 
   function switchToEdit(id: number) {
     dispatch(toEdit(id));
@@ -43,8 +47,8 @@ export function Home() {
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell>
                   <TableCell>
-                    <Tooltip title={row.track.turf_comment}>
-                      <Button>{row.track.name}</Button>
+                    <Tooltip title={row.Track.turf_comment}>
+                      <Button>{row.Track.name}</Button>
                     </Tooltip>
                   </TableCell>
                   <TableCell>{row.name}</TableCell>

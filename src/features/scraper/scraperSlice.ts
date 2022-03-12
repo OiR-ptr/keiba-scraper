@@ -1,7 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
+import { fetchRace } from "./scraperAPI";
 
 export type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
+export type ApiStatus = 'none' | 'loading';
+
+export interface FetchRaceReponse {
+  data: {
+    Races: Race[],
+  },
+}
 
 export interface Track {
   id: number,
@@ -16,7 +24,7 @@ export interface Race {
   course: string,
   weather: string,
   baba: string,
-  track: Track,
+  Track: Track,
 }
 
 export interface Adding {
@@ -30,6 +38,7 @@ export interface ScraperState {
   races: Race[],
   value: number,
   adding: Adding,
+  api: ApiStatus,
 }
 
 export interface EntryHorse {
@@ -52,50 +61,24 @@ export interface RaceJson {
 
 const initialState: ScraperState = {
   menu: 'home',
+  api: 'none',
   targetId: NaN,
-  races: [{ 
-    id: 0,
-    baba: "",
-    course: "芝1600m (右 外)",
-    name: "チューリップ賞",
-    weather: "",
-    track: {
-      id: 1,
-      name: "阪神",
-      comment: "",
-      turf_comment: "芝えぐれてるって～w",
-    }
-  }, { 
-    id: 1,
-    baba: "",
-    course: "芝1200m (右 外)",
-    name: "オーシャンS",
-    weather: "",
-    track: {
-      id: 1,
-      name: "阪神",
-      comment: "",
-      turf_comment: "芝荒れてるかもw",
-    }
-  }, { 
-    id: 2,
-    baba: "馬場:良",
-    course: "芝2000m (右)",
-    name: "弥生賞ディープインパクト記念",
-    weather: "天候:晴",
-    track: {
-      id: 2,
-      name: "中山",
-      comment: "",
-      turf_comment: "芝荒れてるかもw",
-    }
-  }],
+  races: [],
   value: 0,
   adding: {
     raceJson: '',
     horsesJson: [],
   },
 }
+
+export const fetchCurrentRaces = createAsyncThunk(
+  'scraper/fetchRace',
+  async () => {
+    const response = await fetchRace();
+    const respJson = (await response.json()) as FetchRaceReponse;
+    return respJson.data.Races;
+  }
+);
 
 export const scraperSlice = createSlice({
   name: 'scraper',
@@ -124,6 +107,17 @@ export const scraperSlice = createSlice({
       state.adding.horsesJson = [...state.adding.horsesJson, action.payload]
     }
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCurrentRaces.pending, (state) => {
+        state.api = 'loading';
+      })
+      .addCase(fetchCurrentRaces.fulfilled, (state, action) => {
+        state.api = 'none';
+        state.races = action.payload;
+        console.log(state.races);
+      });
+  }
 });
 
 export const { 
