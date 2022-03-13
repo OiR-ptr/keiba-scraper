@@ -5,6 +5,7 @@ import { Badge, Box, Button, IconButton, Link, Modal, Paper, Table, TableBody, T
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntryHorse, RaceJson, selectAdding, addHorseJson } from './scraperSlice';
+import runSnippet2Gif from '../../_media/runSnippet2.gif';
 
 type Props = {
   onError?: VoidFunction,
@@ -77,6 +78,8 @@ export function AddHorseJson(props: Props) {
   return (
     <Box sx={{ width: '100%' }}>
       <Typography>{raceObject?.raceName} {raceObject?.raceTrack} {raceObject?.course}</Typography>
+      <img src={runSnippet2Gif} alt='sorry, please run profile snippet and paste to each horses' />
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
