@@ -115,7 +115,6 @@ export const scraperSlice = createSlice({
       .addCase(fetchCurrentRaces.fulfilled, (state, action) => {
         state.api = 'none';
         state.races = action.payload;
-        console.log(state.races);
       });
   }
 });
