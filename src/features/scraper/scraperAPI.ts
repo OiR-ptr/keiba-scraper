@@ -1,7 +1,7 @@
 type Query = { query: string };
 
 function toGraphQL(query: Query) {
-  return fetch('https://vocal-bug-76.hasura.app/v1/graphql', {
+  return fetch(`${process.env.REACT_APP_HASURA_API_URL}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
