@@ -12,7 +12,7 @@ export function Home() {
 
   useEffect(() => {
     dispatch(fetchCurrentRaces());
-  });
+  }, []);
 
   function switchToEdit(id: number) {
     dispatch(toEdit(id));
