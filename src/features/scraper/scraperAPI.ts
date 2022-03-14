@@ -1,3 +1,5 @@
+import { Adding, HorseProfile, RaceJson, Track } from "./scraperSlice";
+
 type Query = { query: string };
 
 function toGraphQL(query: Query) {
@@ -27,17 +29,66 @@ export function fetchRace() {
           comment
         }
       }
+      Tracks {
+        id
+        name
+      }
     }`,
   };
 
   return toGraphQL(query);
 }
 
-export function registerRace() {
+export function registerRace(adding: Adding, tracks: Track[]) {
+  const race = JSON.parse(adding.raceJson) as RaceJson;
+  const horses = adding.horsesJson.map(horse => JSON.parse(horse) as HorseProfile);
+
   const query = {
     query: 
-    ``,
+    `mutation MyMutation {
+      insert_Races(objects: ${(() => {
+        const track = tracks.find(it => it.name === race.raceTrack);
+
+        return JSON.stringify(Object.assign({
+          name: race.raceName,
+          weahter: race.weather,
+          baba: race.baba,
+          course: race.course,
+        }, track ? { 
+          track_id: track.id 
+        } : {
+        },
+        {
+          Entries: { data: race.horses.map(horse => {
+            const profile = horses.find(h => h.name === horse.HorseInfo);
+
+            return Object.assign({
+              waku: Number(horse.Waku_Txt_C),
+              umaban: Number(horse.Umaban_Txt_C),
+              checkmark: horse.CheckMark_Horse_Select,
+              barei: horse.Barei_Txt_C,
+              handicap: Number(horse.Txt_C),
+              jockey: horse.Jockey,
+              trainer: horse.Trainer,
+              weight: horse.Weight,
+              href: horse.href,
+            }, profile ? {
+              Horse: {
+                data: profile,
+              }
+            } : {});
+          })}
+        }
+        )).replace(/"([0-9a-zA-Z_]*)"/g, "$1");
+      })()}) {
+        returning {
+          id
+        }
+      }
+    }`,
   };
 
-  return toGraphQL(query);
+  debugger;
+  return new Promise(resolve => setTimeout(() => resolve(0), 1000));
+  // return toGraphQL(query);
 }

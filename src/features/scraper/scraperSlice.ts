@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
-import { fetchRace } from "./scraperAPI";
+import { fetchRace, registerRace } from "./scraperAPI";
 
 export type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
 export type ApiStatus = 'none' | 'loading';
@@ -8,6 +8,7 @@ export type ApiStatus = 'none' | 'loading';
 export interface FetchRaceReponse {
   data: {
     Races: Race[],
+    Tracks: Track[],
   },
 }
 
@@ -36,6 +37,7 @@ export interface ScraperState {
   menu: ScraperMenu,
   targetId: number,
   races: Race[],
+  tracks: Track[],
   value: number,
   adding: Adding,
   api: ApiStatus,
@@ -44,18 +46,28 @@ export interface ScraperState {
 export interface EntryHorse {
   Waku_Txt_C: string,
   Umaban_Txt_C: string,
+  CheckMark_Horse_Select: string,
   HorseInfo: string,
   Barei_Txt_C: string,
   Txt_C: string,
   Jockey: string,
+  Trainer: string,
   Weight: string,
   href: string,
+}
+
+export interface HorseProfile {
+  name: string,
+  sire: string,
+  broodmare_sire: string,
 }
 
 export interface RaceJson {
   raceName: string,
   raceTrack: string,
   course: string,
+  weather: string,
+  baba: string,
   horses: EntryHorse[],
 }
 
@@ -64,6 +76,7 @@ const initialState: ScraperState = {
   api: 'none',
   targetId: NaN,
   races: [],
+  tracks: [],
   value: 0,
   adding: {
     raceJson: '',
@@ -76,7 +89,16 @@ export const fetchCurrentRaces = createAsyncThunk(
   async () => {
     const response = await fetchRace();
     const respJson = (await response.json()) as FetchRaceReponse;
-    return respJson.data.Races;
+    return respJson.data;
+  }
+);
+
+export const registerRaces = createAsyncThunk(
+  'scraper/registerRace',
+  async (adding: Adding, thunkApi) => {
+    const state = thunkApi.getState() as RootState;
+    const response = await registerRace(adding, state.scraper.tracks);
+    return 0;
   }
 );
 
@@ -114,7 +136,15 @@ export const scraperSlice = createSlice({
       })
       .addCase(fetchCurrentRaces.fulfilled, (state, action) => {
         state.api = 'none';
-        state.races = action.payload;
+        state.races = action.payload.Races;
+        state.tracks = action.payload.Tracks;
+      })
+      .addCase(registerRaces.pending, (state) => {
+        state.api = 'loading';
+      })
+      .addCase(registerRaces.fulfilled, (state, action) => {
+        state.api = 'none';
+        state.menu = 'home';
       });
   }
 });
