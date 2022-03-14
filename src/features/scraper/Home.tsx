@@ -47,7 +47,7 @@ export function Home() {
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell>
                   <TableCell>
-                    <Tooltip title={row.Track.turf_comment}>
+                    <Tooltip title={row.Track?.turf_comment ?? '状態不明'}>
                       <Button>{row.Track.name}</Button>
                     </Tooltip>
                   </TableCell>
