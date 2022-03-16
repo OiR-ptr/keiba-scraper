@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState, AppThunk } from "../../app/store";
+import { RootState } from "../../app/store";
 import { fetchRace, registerRace } from "./scraperAPI";
 
 export type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
@@ -10,6 +10,12 @@ export interface FetchRaceReponse {
     Races: Race[],
     Tracks: Track[],
   },
+}
+
+export interface RegisterRaceResponse {
+  data: {
+    id: number,
+  }
 }
 
 export interface Track {
@@ -60,6 +66,31 @@ export interface HorseProfile {
   name: string,
   sire: string,
   broodmare_sire: string,
+  results: RaceResult[],
+}
+
+export interface RaceResult {
+  date: Date,
+  track: string,
+  weather: string,
+  round: number,
+  raceName: string,
+  heads: number,
+  waku: number,
+  umaban: number,
+  popular: number,
+  finish: number,
+  jockey: string,
+  handicap: number,
+  course: string,
+  baba: string,
+  time: string,
+  gap: string,
+  passing: string,
+  pace: string,
+  halon: number,
+  weight: string,
+  winner: string,
 }
 
 export interface RaceJson {
@@ -98,7 +129,8 @@ export const registerRaces = createAsyncThunk(
   async (adding: Adding, thunkApi) => {
     const state = thunkApi.getState() as RootState;
     const response = await registerRace(adding, state.scraper.tracks);
-    return 0;
+    const respJson = (await response.json()) as RegisterRaceResponse;
+    return respJson.data;
   }
 );
 

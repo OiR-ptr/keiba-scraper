@@ -74,12 +74,44 @@ export function registerRace(adding: Adding, tracks: Track[]) {
               href: horse.href,
             }, profile ? {
               Horse: {
-                data: profile,
-              }
+                data: Object.assign({
+                  name: profile.name,
+                  sire: profile.sire,
+                  broodmare_sire: profile.broodmare_sire,
+                }, profile.results.length ? {
+                  RaceResults: {
+                    data: profile.results.map(result => {
+                      return {
+                        date: result.date,
+                        track: result.track,
+                        weather: result.weather,
+                        round: result.round,
+                        raceName: result.raceName,
+                        heads: result.heads,
+                        waku: result.waku,
+                        umaban: result.umaban,
+                        popular: result.popular,
+                        finish: result.finish,
+                        jockey: result.jockey,
+                        handicap: result.handicap,
+                        course: result.course,
+                        baba: result.baba,
+                        time: result.time,
+                        gap: result.gap,
+                        passing: result.passing,
+                        pace: result.pace,
+                        halon: result.halon,
+                        weight: result.weight,
+                        winner: result.winner,
+                      };
+                    }),
+                  }
+                } : {}),
+              },
             } : {});
           })}
         }
-        )).replace(/"([0-9a-zA-Z_]*)"/g, "$1");
+        )).replace(/"([0-9a-zA-Z_]*)":/g, "$1:");
       })()}) {
         returning {
           id
@@ -88,7 +120,5 @@ export function registerRace(adding: Adding, tracks: Track[]) {
     }`,
   };
 
-  debugger;
-  return new Promise(resolve => setTimeout(() => resolve(0), 1000));
-  // return toGraphQL(query);
+  return toGraphQL(query);
 }
