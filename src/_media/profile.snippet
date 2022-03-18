@@ -30,8 +30,8 @@ const convertTable = {
   "距離": { name: "course", type: "String" },
   "馬場": { name: "baba", type: "String" },
   "馬場指数": { name: "baba_idx", type: "String" },
-  "タイム": { name: "time", type: "String" },
-  "着差": { name: "gap", type: "String" },
+  "タイム": { name: "time", type: "Interval" },
+  "着差": { name: "gap", type: "Interval" },
   "ﾀｲﾑ指数": { name: "time_idx", type: "String" },
   "通過": { name: "passing", type: "String" },
   "ペース": { name: "pace", type: "String" },
@@ -43,10 +43,16 @@ const convertTable = {
   "賞金": { name: "prize", type: "Numeric" },
 }
 
-const toInterval = (str) => {
+const _deprecated_toInterval = (str) => {
     const interval = /(?<sign>[-])?(?<min>[0-9]{0,2}):?(?<sec>[0-9]{1,2}\.[0-9]*)/gu;
     const result = interval.exec(str);
     return (result.groups.sign ? -1 : 1) * ( Number(result.groups.min) * 60 + Number(result.groups.sec) );
+}
+
+const toInterval = (str) => {
+  const interval = /([-]?[0-9]{0,2}:?[0-9]{1,2}\.[0-9]*)/g;
+  const result = interval.exec(str);
+  return result && result[0];
 }
 
 const races = [...document.querySelectorAll('table.db_h_race_results tbody tr')].map(tr => {
@@ -59,7 +65,7 @@ const races = [...document.querySelectorAll('table.db_h_race_results tbody tr')]
                 break;
                 
             case "String":
-                previous[propDef.name] = record.innerText;
+                previous[propDef.name] = record.innerText.trimEnd();
                 break;
 
             case "Numeric":
