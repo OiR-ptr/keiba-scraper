@@ -13,7 +13,6 @@ export function Scraper() {
     switch(menu) {
       case 'home':    return <Home />;
       case 'edit':    return <div>EDIT!!! {target}</div>;
-      case 'delete':  return <div>DELETE!!! {target}</div>
       case 'add':     return <AddRace />;
     }
     return <div>ERROR!!!!</div>;

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { fetchRace, registerRace } from "./scraperAPI";
+import { deleteRaceById, fetchRace, registerRace } from "./scraperAPI";
 
-export type ScraperMenu = 'home' | 'edit' | 'delete' | 'add';
+export type ScraperMenu = 'home' | 'edit' | 'add';
 export type ApiStatus = 'none' | 'loading';
 
 export interface FetchRaceReponse {
@@ -15,6 +15,28 @@ export interface FetchRaceReponse {
 export interface RegisterRaceResponse {
   data: {
     id: number,
+  }
+}
+
+export interface DeleteRaceByIdResponse {
+  data: {
+    delete_RaceResult: {
+      affected_rows: number,
+    },
+    delete_Horses: {
+      affected_rows: number,
+    },
+    delete_Entries: {
+      affected_rows: number,
+    },
+    delete_Races: {
+      affected_rows: number,
+      returning: [
+        {
+          id: number,
+        }
+      ]
+    }
   }
 }
 
@@ -134,6 +156,15 @@ export const registerRaces = createAsyncThunk(
   }
 );
 
+export const deleteRace = createAsyncThunk(
+  'scraper/deleteRace',
+  async (raceId: number) => {
+    const response = await deleteRaceById(raceId);
+    const respJson = (await response.json()) as DeleteRaceByIdResponse;
+    return respJson.data;
+  }
+);
+
 export const scraperSlice = createSlice({
   name: 'scraper',
   initialState,
@@ -144,10 +175,6 @@ export const scraperSlice = createSlice({
     },
     toEdit: (state, action: PayloadAction<number>) => {
       state.menu = 'edit';
-      state.targetId = action.payload;
-    },
-    toDelete: (state, action: PayloadAction<number>) => {
-      state.menu = 'delete';
       state.targetId = action.payload;
     },
     toAdd: (state) => {
@@ -177,12 +204,22 @@ export const scraperSlice = createSlice({
       .addCase(registerRaces.fulfilled, (state, action) => {
         state.api = 'none';
         state.menu = 'home';
+      })
+      .addCase(deleteRace.pending, (state) => {
+        state.api = 'loading';
+      })
+      .addCase(deleteRace.fulfilled, (state, action) => {
+        const removed = action.payload.delete_Races.returning;
+        state.api = 'none';
+        state.races = state.races.filter(race => {
+          return removed.find(rm => rm.id !== race.id);
+        });
       });
   }
 });
 
 export const { 
-  toHome, toEdit, toDelete, toAdd, 
+  toHome, toEdit, toAdd, 
   updateRaceJson,
   addHorseJson,
 } = scraperSlice.actions;

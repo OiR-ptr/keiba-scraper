@@ -122,3 +122,29 @@ export function registerRace(adding: Adding, tracks: Track[]) {
 
   return toGraphQL(query);
 }
+
+export function deleteRaceById(raceId: number) {
+  debugger;
+  const query = {
+    query: 
+    `mutation MyMutation {
+      delete_RaceResult(where: {Horse: {Entries: {Race: {id: {_eq: ${raceId}}}}}}) {
+        affected_rows
+      }
+      delete_Horses(where: {Entries: {Race: {id: {_eq: ${raceId}}}}}) {
+        affected_rows
+      }
+      delete_Entries(where: {Race: {id: {_eq: ${raceId}}}}) {
+        affected_rows
+      }
+      delete_Races(where: {id: {_eq: ${raceId}}}) {
+        affected_rows,
+        returning {
+          id
+        }
+      }
+    }`,
+  };
+
+  return toGraphQL(query);
+}

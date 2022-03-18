@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchCurrentRaces, selectRaces, toAdd, toDelete, toEdit } from './scraperSlice';
+import { fetchCurrentRaces, selectRaces, toAdd, toEdit } from './scraperSlice';
+import { DeleteConfirm } from './DeleteConfirm';
 
 export function Home() {
   const races = useAppSelector(selectRaces);
   const dispatch = useAppDispatch();
+
+  const [removeIt, setRemoveIt] = useState({ id: -1, name: '' });
 
   useEffect(() => {
     dispatch(fetchCurrentRaces());
@@ -18,12 +21,20 @@ export function Home() {
     dispatch(toEdit(id));
   }
 
-  function switchToDelete(id: number) {
-    dispatch(toDelete(id));
+  function handleDelete(id: number, name: string) {
+    setRemoveIt({ ...removeIt, id, name });
   }
 
   function switchToAdd() {
     dispatch(toAdd());
+  }
+
+  function handleDeleteCancel() {
+    setRemoveIt({ ...removeIt, id: -1, name: '' });
+  }
+
+  function handleDeleteOk() {
+    setRemoveIt({ ...removeIt, id: -1, name: '' });
   }
 
   return (
@@ -60,7 +71,7 @@ export function Home() {
                       <IconButton onClick={e => switchToEdit(row.id)}><EditIcon /></IconButton>
                     </Tooltip>
                     <Tooltip title={`${row.name}を削除`}>
-                      <IconButton onClick={e => switchToDelete(row.id)}><DeleteIcon /></IconButton>
+                      <IconButton onClick={e => handleDelete(row.id, row.name)}><DeleteIcon /></IconButton>
                     </Tooltip>
                   </TableCell>
                 </TableRow>
@@ -77,6 +88,11 @@ export function Home() {
           レースを登録
         </Button>
       </Box>
+      <DeleteConfirm 
+        open={removeIt.id !== -1} 
+        target={removeIt} 
+        onCancel={handleDeleteCancel} 
+        onComplete={handleDeleteOk} />
     </>
   );
 }
