@@ -124,7 +124,6 @@ export function registerRace(adding: Adding, tracks: Track[]) {
 }
 
 export function deleteRaceById(raceId: number) {
-  debugger;
   const query = {
     query: 
     `mutation MyMutation {
