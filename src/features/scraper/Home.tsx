@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchCurrentRaces, selectRaces, toAdd, toEdit } from './scraperSlice';
+import { fetchCurrentRaces, selectRaces, toAdd, toOpen } from './scraperSlice';
 import { DeleteConfirm } from './DeleteConfirm';
 
 export function Home() {
@@ -17,8 +17,8 @@ export function Home() {
     dispatch(fetchCurrentRaces());
   }, []);
 
-  function switchToEdit(id: number) {
-    dispatch(toEdit(id));
+  function handleOpen(id: number) {
+    dispatch(toOpen(id));
   }
 
   function handleDelete(id: number, name: string) {
@@ -67,8 +67,8 @@ export function Home() {
                   <TableCell>{row.weather}</TableCell>
                   <TableCell>{row.baba}</TableCell>
                   <TableCell>
-                    <Tooltip title={`${row.name}を編集`}>
-                      <IconButton onClick={e => switchToEdit(row.id)}><EditIcon /></IconButton>
+                    <Tooltip title={`${row.name}を確認`}>
+                      <IconButton onClick={e => handleOpen(row.id)}><VisibilityIcon /></IconButton>
                     </Tooltip>
                     <Tooltip title={`${row.name}を削除`}>
                       <IconButton onClick={e => handleDelete(row.id, row.name)}><DeleteIcon /></IconButton>

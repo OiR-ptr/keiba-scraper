@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { deleteRaceById, fetchRace, registerRace } from "./scraperAPI";
 
-export type ScraperMenu = 'home' | 'edit' | 'add';
+export type ScraperMenu = 'home' | 'open' | 'add';
 export type ApiStatus = 'none' | 'loading';
 
 export interface FetchRaceReponse {
@@ -173,8 +173,8 @@ export const scraperSlice = createSlice({
       state.menu = 'home';
       state.targetId = NaN;
     },
-    toEdit: (state, action: PayloadAction<number>) => {
-      state.menu = 'edit';
+    toOpen: (state, action: PayloadAction<number>) => {
+      state.menu = 'open';
       state.targetId = action.payload;
     },
     toAdd: (state) => {
@@ -219,7 +219,7 @@ export const scraperSlice = createSlice({
 });
 
 export const { 
-  toHome, toEdit, toAdd, 
+  toHome, toOpen, toAdd, 
   updateRaceJson,
   addHorseJson,
 } = scraperSlice.actions;
