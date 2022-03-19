@@ -108,7 +108,13 @@ export function registerRace(adding: Adding, tracks: Track[]) {
                   }
                 } : {}),
               },
-            } : {});
+            } : {
+              Horse: {
+                data: {
+                  name: horse.HorseInfo,
+                }
+              },
+            });
           })}
         }
         )).replace(/"([0-9a-zA-Z_]*)":/g, "$1:");
@@ -147,3 +153,4 @@ export function deleteRaceById(raceId: number) {
 
   return toGraphQL(query);
 }
+
