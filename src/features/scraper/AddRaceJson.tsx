@@ -11,7 +11,7 @@ type Props = {
 
 export function AddRaceJson(props: Props) {
   const adding = useAppSelector(selectAdding);
-  const { raceJson, horsesJson } = adding;
+  const { raceJson } = adding;
   const dispatch = useAppDispatch();
 
   const [hasJsonError, setHasJsonError] = useState(false);

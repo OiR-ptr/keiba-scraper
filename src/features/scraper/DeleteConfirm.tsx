@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useAppDispatch } from '../../app/hooks';
-import { deleteRaceById } from './scraperAPI';
 import { deleteRace } from './scraperSlice';
 
 type Props = {

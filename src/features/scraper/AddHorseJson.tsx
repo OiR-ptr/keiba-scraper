@@ -16,7 +16,7 @@ type RegisterCheck = 'none' | 'ok' | 'error';
 
 export function AddHorseJson(props: Props) {
   const adding = useAppSelector(selectAdding);
-  const { raceJson, horsesJson } = adding;
+  const { raceJson } = adding;
   const dispatch = useAppDispatch();
 
   const [horsesRegister, setHorsesRegister] = useState<RegisterCheck[]>([]);
