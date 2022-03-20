@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { deleteRaceById, fetchRace, registerRace } from "./scraperAPI";
+import { deleteRaceById, fetchRace, fetchRaceById, registerRace } from "./scraperAPI";
 
 export type ScraperMenu = 'home' | 'open' | 'add';
 export type ApiStatus = 'none' | 'loading';
@@ -40,6 +40,63 @@ export interface DeleteRaceByIdResponse {
   }
 }
 
+export interface FetchRaceByIdResponse {
+  data: {
+    Races_by_pk: RaceCard,
+  }
+}
+
+export interface RaceCard {
+  name: string,
+  weather: string,
+  baba: string,
+  course: string,
+  Track: {
+    name: string,
+    comment: string,
+    turf_comment: string,
+  },
+  Entries: [
+    {
+      waku: number,
+      umaban: number,
+      barei: string,
+      handicap: number,
+      weight: string,
+      jockey: string,
+      trainer: string,
+      href: string,
+      Horse: {
+        name: string,
+        sire: string,
+        broodmare_sire: string,
+        RaceResults: [
+          {
+            date: Date,
+            raceName: string,
+            course: string,
+            weather: string,
+            baba: string,
+            track: string,
+            waku: number,
+            umaban: number,
+            handicap: number,
+            weight: string,
+            jockey: string,
+            finish: number,
+            time: string,
+            gap: string,
+            halon: number,
+            winner: string,
+            passing: string,
+            pace: string,
+          }
+        ],
+      }
+    }
+  ],
+}
+
 export interface Track {
   id: number,
   name: string,
@@ -61,6 +118,10 @@ export interface Adding {
   horsesJson: string[],
 }
 
+export interface Opening {
+  raceCard: RaceCard | null,
+}
+
 export interface ScraperState {
   menu: ScraperMenu,
   targetId: number,
@@ -69,6 +130,7 @@ export interface ScraperState {
   value: number,
   adding: Adding,
   api: ApiStatus,
+  opening: Opening,
 }
 
 export interface EntryHorse {
@@ -135,6 +197,9 @@ const initialState: ScraperState = {
     raceJson: '',
     horsesJson: [],
   },
+  opening: {
+    raceCard: null,
+  },
 }
 
 export const fetchCurrentRaces = createAsyncThunk(
@@ -165,6 +230,21 @@ export const deleteRace = createAsyncThunk(
   }
 );
 
+export const openRace = createAsyncThunk(
+  'scraper/openRace',
+  async (raceId: number, thunkApi) => {
+    console.warn('scraper/openRace');
+    const state = thunkApi.getState() as RootState;
+    if(state.scraper.opening.raceCard !== null) {
+      return state.scraper.opening.raceCard;
+    }
+
+    const response = await fetchRaceById(raceId);
+    const respJson = (await response.json()) as FetchRaceByIdResponse;
+    return respJson.data.Races_by_pk;
+  },
+);
+
 export const scraperSlice = createSlice({
   name: 'scraper',
   initialState,
@@ -172,6 +252,9 @@ export const scraperSlice = createSlice({
     toHome: (state) => {
       state.menu = 'home';
       state.targetId = NaN;
+      state.adding.raceJson = '';
+      state.adding.horsesJson = [];
+      state.opening.raceCard = null;
     },
     toOpen: (state, action: PayloadAction<number>) => {
       state.menu = 'open';
@@ -180,6 +263,7 @@ export const scraperSlice = createSlice({
     toAdd: (state) => {
       state.menu = 'add';
       state.targetId = NaN;
+      state.opening.raceCard = null;
     },
     updateRaceJson: (state, action: PayloadAction<string>) => {
       state.adding.raceJson = action.payload;
@@ -214,6 +298,13 @@ export const scraperSlice = createSlice({
         state.races = state.races.filter(race => {
           return removed.find(rm => rm.id !== race.id);
         });
+      })
+      .addCase(openRace.pending, (state) => {
+        state.api = 'loading';
+      })
+      .addCase(openRace.fulfilled, (state, action) => {
+        state.api = 'none';
+        state.opening.raceCard = action.payload;
       });
   }
 });
@@ -228,5 +319,6 @@ export const selectMenu = (state: RootState) => state.scraper.menu;
 export const selectTargetId = (state: RootState) => state.scraper.targetId;
 export const selectRaces = (state: RootState) => state.scraper.races;
 export const selectAdding = (state: RootState) => state.scraper.adding;
+export const selectOpening = (state: RootState) => state.scraper.opening;
 
 export default scraperSlice.reducer;

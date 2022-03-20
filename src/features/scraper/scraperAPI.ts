@@ -51,7 +51,7 @@ export function registerRace(adding: Adding, tracks: Track[]) {
 
         return JSON.stringify(Object.assign({
           name: race.raceName,
-          weahter: race.weather,
+          weather: race.weather,
           baba: race.baba,
           course: race.course,
         }, track ? { 
@@ -154,3 +154,58 @@ export function deleteRaceById(raceId: number) {
   return toGraphQL(query);
 }
 
+export function fetchRaceById(raceId: number) {
+  const query = {
+    query: 
+    `query MyQuery {
+      Races_by_pk(id: ${raceId}) {
+        name
+        weather
+        baba
+        course
+        Track {
+          name
+          comment
+          turf_comment
+        }
+        Entries {
+          waku
+          umaban
+          barei
+          handicap
+          weight
+          jockey
+          trainer
+          href
+          Horse {
+            name
+            sire
+            broodmare_sire
+            RaceResults {
+              date
+              raceName
+              course
+              weather
+              baba
+              track
+              waku
+              umaban
+              handicap
+              weight
+              jockey
+              finish
+              time
+              gap
+              halon
+              winner
+              passing
+              pace
+            }
+          }
+        }
+      }
+    }`,
+  };
+
+  return toGraphQL(query);
+}
