@@ -209,3 +209,35 @@ export function fetchRaceById(raceId: number) {
 
   return toGraphQL(query);
 }
+
+export function fetchRecordSameCondition(course: string) {
+  const query = {
+    query: 
+    `query MyQuery {
+      RaceResult(where: {course: {_eq: "${course}"}}, order_by: {time: asc}) {
+        date
+        weather
+        baba
+        track
+        raceName
+        course
+        handicap
+        weight
+        finish
+        waku
+        umaban
+        jockey
+        time
+        halon
+        winner
+        passing
+        pace
+        Horse {
+          name
+        }
+      }
+    }`,
+  };
+
+  return toGraphQL(query);
+}

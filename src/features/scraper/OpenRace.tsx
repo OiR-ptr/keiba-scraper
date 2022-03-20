@@ -3,12 +3,14 @@ import { Button, Tab } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { OpenEntries } from './OpenEntries';
-import { openRace, selectTargetId, toHome } from './scraperSlice';
+import { OpenSameCondRecord } from './OpenSameCondRecord';
+import { openRace, openSameCondRecord, selectOpening, selectTargetId, toHome } from './scraperSlice';
 
 type OpenTab = 'entries' | 'same' | 'by_condition' | 'heavy' | 'discount';
 
 export function OpenRace() {
   const targetRace = useAppSelector(selectTargetId);
+  const { raceCard } = useAppSelector(selectOpening);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = React.useState<OpenTab>('entries');
@@ -18,6 +20,14 @@ export function OpenRace() {
       case 'entries':
         dispatch(openRace(targetRace));
         break;
+
+      case 'same': {
+        const course = raceCard?.course.match(/[芝ダ][0-9]{3,4}/);
+        if(course) {
+          dispatch(openSameCondRecord(course[0]));
+        }
+        break;
+      }
     }
 
     
@@ -48,7 +58,7 @@ export function OpenRace() {
         </TabPanel>
 
         <TabPanel value='same'>
-          Same
+          <OpenSameCondRecord course={raceCard?.course ?? '不明'} />
         </TabPanel>
 
         <TabPanel value='by_condition'>

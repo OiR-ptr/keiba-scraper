@@ -1,11 +1,11 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { styled } from '@mui/material/styles';
+import { useAppSelector } from '../../app/hooks';
 import { Box, Button, Collapse, IconButton, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
-import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { selectOpening } from './scraperSlice';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { HtmlTooltip } from '../../HtmlTooltip';
 
 type RowProps = {
   index: number,
@@ -48,25 +48,13 @@ type RowProps = {
   }
 };
 
-const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}));
-
 function Row(props: RowProps) {
   const { index, entry } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
     <>
-      <TableRow key={index}>
+      <TableRow key={'p-' + index}>
         <TableCell>
           <IconButton size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -75,9 +63,19 @@ function Row(props: RowProps) {
         <TableCell>{entry.waku}</TableCell>
         <TableCell>{entry.umaban}</TableCell>
         <TableCell>
-          <Link href={entry.href} target='_blank' rel='noopener noreferrer'>
-            {entry.Horse.name}
-          </Link>
+          <Tooltip title='netkeiba.com'>
+            <Link href={entry.href} target='_blank' rel='noopener noreferrer'>
+              <OpenInNewIcon />  
+            </Link>
+          </Tooltip>
+          <HtmlTooltip title={
+            <>
+              <Typography color='inherit'>父: {entry.Horse.sire}</Typography>
+              <Typography color='inherit'>母父: {entry.Horse.broodmare_sire}</Typography>
+            </>
+          }>
+            <Button>{entry.Horse.name}</Button>
+          </HtmlTooltip>
         </TableCell>
         <TableCell>{entry.barei}</TableCell>
         <TableCell>{entry.handicap}</TableCell>
@@ -86,14 +84,14 @@ function Row(props: RowProps) {
         <TableCell>{entry.trainer}</TableCell>
       </TableRow>
 
-      <TableRow>
+      <TableRow key={'c-' + index}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
           <Collapse in={open}>
             <Box sx={{ margin: 1 }}>
               <Table size='small'>
                 <TableHead>
                   <TableRow>
-                    <TableCell>競争</TableCell>
+                    <TableCell>レース</TableCell>
                     <TableCell>距離</TableCell>
                     <TableCell>斤量</TableCell>
                     <TableCell>体重</TableCell>
@@ -107,7 +105,7 @@ function Row(props: RowProps) {
                 <TableBody>
                   {entry.Horse.RaceResults.map((horse, index) => {
                     return (
-                      <TableRow key={index}>
+                      <TableRow key={'ch-' + index}>
                         <TableCell>
                           <HtmlTooltip title={
                             <>
@@ -151,7 +149,6 @@ function Row(props: RowProps) {
 
 export function OpenEntries() {
   const { raceCard } = useAppSelector(selectOpening);
-  const dispatch = useAppDispatch();
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -172,7 +169,7 @@ export function OpenEntries() {
           </TableHead>
           <TableBody>
             {raceCard?.Entries?.map((entry, index) => {
-              return <Row index={index} entry={entry} />;
+              return <Row key={index} index={index} entry={entry} />;
             })}
           </TableBody>
         </Table>

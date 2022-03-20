@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { deleteRaceById, fetchRace, fetchRaceById, registerRace } from "./scraperAPI";
+import { deleteRaceById, fetchRace, fetchRaceById, fetchRecordSameCondition, registerRace } from "./scraperAPI";
 
 export type ScraperMenu = 'home' | 'open' | 'add';
 export type ApiStatus = 'none' | 'loading';
@@ -43,6 +43,35 @@ export interface DeleteRaceByIdResponse {
 export interface FetchRaceByIdResponse {
   data: {
     Races_by_pk: RaceCard,
+  }
+}
+
+export interface FetchRecordSameConditionResponse {
+  data: {
+    RaceResult: SameCondRecord[],
+  }
+}
+
+export interface SameCondRecord {
+  date: Date,
+  weather: string,
+  baba: string,
+  track: string,
+  raceName: string,
+  course: string,
+  handicap: number,
+  weight: string,
+  finish: number,
+  waku: number,
+  umaban: number,
+  jockey: string,
+  time: string,
+  halon: number,
+  winner: string,
+  passing: string,
+  pace: string,
+  Horse: {
+    name: string,
   }
 }
 
@@ -120,6 +149,7 @@ export interface Adding {
 
 export interface Opening {
   raceCard: RaceCard | null,
+  sameCondition: SameCondRecord[],
 }
 
 export interface ScraperState {
@@ -199,6 +229,7 @@ const initialState: ScraperState = {
   },
   opening: {
     raceCard: null,
+    sameCondition: [],
   },
 }
 
@@ -233,7 +264,6 @@ export const deleteRace = createAsyncThunk(
 export const openRace = createAsyncThunk(
   'scraper/openRace',
   async (raceId: number, thunkApi) => {
-    console.warn('scraper/openRace');
     const state = thunkApi.getState() as RootState;
     if(state.scraper.opening.raceCard !== null) {
       return state.scraper.opening.raceCard;
@@ -242,6 +272,15 @@ export const openRace = createAsyncThunk(
     const response = await fetchRaceById(raceId);
     const respJson = (await response.json()) as FetchRaceByIdResponse;
     return respJson.data.Races_by_pk;
+  },
+);
+
+export const openSameCondRecord = createAsyncThunk(
+  'scraper/openSameCondRecord',
+  async (course: string) => {
+    const response = await fetchRecordSameCondition(course);
+    const respJson = (await response.json()) as FetchRecordSameConditionResponse;
+    return respJson.data.RaceResult;
   },
 );
 
@@ -305,6 +344,13 @@ export const scraperSlice = createSlice({
       .addCase(openRace.fulfilled, (state, action) => {
         state.api = 'none';
         state.opening.raceCard = action.payload;
+      })
+      .addCase(openSameCondRecord.pending, (state) => {
+        state.api = 'loading';
+      })
+      .addCase(openSameCondRecord.fulfilled, (state, action) => {
+        state.api = 'none';
+        state.opening.sameCondition = action.payload;
       });
   }
 });
