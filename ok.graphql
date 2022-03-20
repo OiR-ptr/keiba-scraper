@@ -1,0 +1,174 @@
+mutation MyMutation {
+  insert_Races(
+    objects: {
+      name: "金鯱賞"
+      baba: "馬場:良"
+      course: "芝2000m (左)"
+      track_id: 8
+      Entries: {
+        data: [
+          {
+            waku: 1
+            umaban: 1
+            checkmark: "--"
+            barei: "牡6"
+            handicap: 56
+            jockey: "岩田康"
+            trainer: "栗東松下"
+            weight: "454(-4)"
+            href: "https://db.netkeiba.com/horse/2016102929"
+            Horse: { data: { name: "ショウナンバルディ" } }
+          }
+          {
+            waku: 2
+            umaban: 2
+            checkmark: "--"
+            barei: "牡7"
+            handicap: 57
+            jockey: "西村淳"
+            trainer: "栗東藤原"
+            weight: "504(+4)"
+            href: "https://db.netkeiba.com/horse/2015104317"
+            Horse: { data: { name: "ギベオン" } }
+          }
+          {
+            waku: 3
+            umaban: 3
+            checkmark: "--"
+            barei: "牡4"
+            handicap: 56
+            jockey: "藤岡佑"
+            trainer: "栗東藤岡"
+            weight: "506(-2)"
+            href: "https://db.netkeiba.com/horse/2018100274"
+            Horse: { data: { name: "ジャックドール" } }
+          }
+          {
+            waku: 4
+            umaban: 4
+            checkmark: "--"
+            barei: "牝5"
+            handicap: 54
+            jockey: "岩田望"
+            trainer: "栗東斉藤崇"
+            weight: "480(-6)"
+            href: "https://db.netkeiba.com/horse/2017106583"
+            Horse: { data: { name: "ソフトフルート" } }
+          }
+          {
+            waku: 4
+            umaban: 5
+            checkmark: "--"
+            barei: "牡5"
+            handicap: 56
+            jockey: "吉田隼"
+            trainer: "栗東友道"
+            weight: "466(-8)"
+            href: "https://db.netkeiba.com/horse/2017105376"
+            Horse: { data: { name: "ポタジェ" } }
+          }
+          {
+            waku: 5
+            umaban: 6
+            checkmark: "--"
+            barei: "牝5"
+            handicap: 55
+            jockey: "幸"
+            trainer: "栗東中竹"
+            weight: "512(-4)"
+            href: "https://db.netkeiba.com/horse/2017106203"
+            Horse: { data: { name: "アカイイト" } }
+          }
+          {
+            waku: 5
+            umaban: 7
+            checkmark: "--"
+            barei: "牝6"
+            handicap: 54
+            jockey: "福永"
+            trainer: "美浦斎藤誠"
+            weight: "480(+4)"
+            href: "https://db.netkeiba.com/horse/2016104791"
+            Horse: { data: { name: "シャドウディーヴァ" } }
+          }
+          {
+            waku: 6
+            umaban: 8
+            checkmark: "--"
+            barei: "牡5"
+            handicap: 56
+            jockey: "大野"
+            trainer: "美浦和田勇"
+            weight: "462(+4)"
+            href: "https://db.netkeiba.com/horse/2017104756"
+            Horse: { data: { name: "アラタ" } }
+          }
+          {
+            waku: 6
+            umaban: 9
+            checkmark: "--"
+            barei: "牡6"
+            handicap: 56
+            jockey: "荻野極"
+            trainer: "栗東中尾"
+            weight: "504(-2)"
+            href: "https://db.netkeiba.com/horse/2016105272"
+            Horse: { data: { name: "シフルマン" } }
+          }
+          {
+            waku: 7
+            umaban: 10
+            checkmark: "--"
+            barei: "牝5"
+            handicap: 56
+            jockey: "川田"
+            trainer: "栗東高野"
+            weight: "430(-4)"
+            href: "https://db.netkeiba.com/horse/2017105335"
+            Horse: { data: { name: "レイパパレ" } }
+          }
+          {
+            waku: 7
+            umaban: 11
+            checkmark: "--"
+            barei: "牝4"
+            handicap: 54
+            jockey: "Ｍ．デムーロ"
+            trainer: "栗東斉藤崇"
+            weight: "498(+8)"
+            href: "https://db.netkeiba.com/horse/2018105554"
+            Horse: { data: { name: "ステラリア" } }
+          }
+          {
+            waku: 8
+            umaban: 12
+            checkmark: "--"
+            barei: "牝6"
+            handicap: 54
+            jockey: "藤岡康"
+            trainer: "栗東友道"
+            weight: "478(-4)"
+            href: "https://db.netkeiba.com/horse/2016105198"
+            Horse: { data: { name: "ランブリングアレー" } }
+          }
+          {
+            waku: 8
+            umaban: 13
+            checkmark: "--"
+            barei: "牡7"
+            handicap: 56
+            jockey: "鮫島駿"
+            trainer: "栗東高橋忠"
+            weight: "480(-6)"
+            href: "https://db.netkeiba.com/horse/2015102735"
+            Horse: { data: { name: "サンレイポケット" } }
+          }
+        ]
+      }
+    }
+  ) {
+    returning {
+      id
+    }
+  }
+}

@@ -1,12 +1,14 @@
 import { Box, Button, Step, StepLabel, Stepper } from '@mui/material';
 import React, { useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { AddHorseJson } from './AddHorseJson';
 import { AddRaceJson } from './AddRaceJson';
 import { PrepareSnippet } from './PrepareSnippet';
-import { toHome } from './scraperSlice';
+import { registerRaces, selectAdding, toHome } from './scraperSlice';
 
 export function AddRace() {
+  const adding = useAppSelector(selectAdding);
+
   const [activeStep, setActiveStep] = useState(0);
   const [hasRaceStepError, setHasRaceStepError] = useState(false);
   const dispatch = useAppDispatch();
@@ -30,7 +32,7 @@ export function AddRace() {
   function handleNext() {
     const nextTo = activeStep + 1;
     if(steps.length <= nextTo) {
-      console.error('STEP COMPLETED!!!');
+      dispatch(registerRaces(adding));
     } else {
       setActiveStep(nextTo);
     }

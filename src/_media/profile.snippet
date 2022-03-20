@@ -12,9 +12,71 @@ const theads = [...document.querySelectorAll('table.db_h_race_results thead th')
     return th.innerText.replaceAll('\n', '');
 });
 
+const convertTable = {
+  "日付": { name: "date", type: "Date" },
+  "開催": { name: "track", type: "String" },
+  "天気": { name: "weather", type: "String" },
+  "R": { name: "round", type: "Numeric" },
+  "レース名": { name: "raceName", type: "String" },
+  "映像": { name: "v", type: "String" },
+  "頭数": { name: "heads", type: "Numeric" },
+  "枠番": { name: "waku", type: "Numeric" },
+  "馬番": { name: "umaban",type: "Numeric" },
+  "オッズ": { name: "odds", type: "Numeric" },
+  "人気": { name: "popular", type: "Numeric" },
+  "着順": { name: "finish", type: "Numeric" },
+  "騎手": { name: "jockey", type: "String" },
+  "斤量": { name: "handicap", type: "Numeric" },
+  "距離": { name: "course", type: "String" },
+  "馬場": { name: "baba", type: "String" },
+  "馬場指数": { name: "baba_idx", type: "String" },
+  "タイム": { name: "time", type: "Interval" },
+  "着差": { name: "gap", type: "Interval" },
+  "ﾀｲﾑ指数": { name: "time_idx", type: "String" },
+  "通過": { name: "passing", type: "String" },
+  "ペース": { name: "pace", type: "String" },
+  "上り": { name: "halon", type: "Numeric" },
+  "馬体重": { name: "weight", type: "String" },
+  "厩舎ｺﾒﾝﾄ": { name: "comment", type: "String" },
+  "備考": { name: "remarks", type: "String" },
+  "勝ち馬(2着馬)": { name: "winner", type: "String" },
+  "賞金": { name: "prize", type: "Numeric" },
+}
+
+const _deprecated_toInterval = (str) => {
+    const interval = /(?<sign>[-])?(?<min>[0-9]{0,2}):?(?<sec>[0-9]{1,2}\.[0-9]*)/gu;
+    const result = interval.exec(str);
+    return (result.groups.sign ? -1 : 1) * ( Number(result.groups.min) * 60 + Number(result.groups.sec) );
+}
+
+const toInterval = (str) => {
+  const interval = /([-]?[0-9]{0,2}:?[0-9]{1,2}\.[0-9]*)/g;
+  const result = interval.exec(str);
+  return result && result[0];
+}
+
 const races = [...document.querySelectorAll('table.db_h_race_results tbody tr')].map(tr => {
     return [...tr.children].reduce((previous, record, idx) => {
-        previous[theads[idx]] = record.innerText;
+        const propDef = convertTable[theads[idx]];
+
+        switch(propDef.type) {
+            case "Date":
+                previous[propDef.name] = new Date(record.innerText);
+                break;
+                
+            case "String":
+                previous[propDef.name] = record.innerText.trimEnd();
+                break;
+
+            case "Numeric":
+                previous[propDef.name] = Number(record.innerText);
+                break;
+
+            case "Interval":
+                previous[propDef.name] = toInterval(record.innerText);
+                break;
+        }
+        
         return previous;
     }, {});
 })
@@ -23,5 +85,5 @@ copy(Object.assign({
 }, {
     name: horseName
 }, horseSire, {
-    races
+    results: races,
 }));
