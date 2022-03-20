@@ -48,9 +48,9 @@ export function OpenRace() {
         <TabList sx={{ borderBottom: 1, borderColor: 'divider' }} onChange={handleTabChange}>
           <Tab value='entries' label='出馬表' />
           <Tab value='same' label='同条件' />
-          <Tab value='by_condition' label='条件別' />
+          {/* <Tab value='by_condition' label='条件別' />
           <Tab value='heavy' label='不良馬場' />
-          <Tab value='discount' label='割引' />
+          <Tab value='discount' label='割引' /> */}
         </TabList>
 
         <TabPanel value='entries'>
