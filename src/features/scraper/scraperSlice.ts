@@ -277,7 +277,12 @@ export const openRace = createAsyncThunk(
 
 export const openSameCondRecord = createAsyncThunk(
   'scraper/openSameCondRecord',
-  async (course: string) => {
+  async (course: string, thunkApi) => {
+    const state = thunkApi.getState() as RootState;
+    if(0 < state.scraper.opening.sameCondition.length) {
+      return state.scraper.opening.sameCondition;
+    }
+
     const response = await fetchRecordSameCondition(course);
     const respJson = (await response.json()) as FetchRecordSameConditionResponse;
     return respJson.data.RaceResult;
