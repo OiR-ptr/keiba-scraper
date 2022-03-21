@@ -210,11 +210,11 @@ export function fetchRaceById(raceId: number) {
   return toGraphQL(query);
 }
 
-export function fetchRecordSameCondition(course: string) {
+export function fetchRecordSameCondition(course: string, raceId: number) {
   const query = {
     query: 
     `query MyQuery {
-      RaceResult(where: {course: {_eq: "${course}"}}, order_by: {time: asc}) {
+      RaceResult(where: {course: {_eq: "${course}"}, Horse: {Entries: {Race: {id: {_eq: ${raceId}}}}}}, order_by: {time: asc}) {
         date
         weather
         baba

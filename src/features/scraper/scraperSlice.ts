@@ -283,7 +283,8 @@ export const openSameCondRecord = createAsyncThunk(
       return state.scraper.opening.sameCondition;
     }
 
-    const response = await fetchRecordSameCondition(course);
+    const { targetId } = state.scraper;
+    const response = await fetchRecordSameCondition(course, targetId);
     const respJson = (await response.json()) as FetchRecordSameConditionResponse;
     return respJson.data.RaceResult;
   },
@@ -299,6 +300,7 @@ export const scraperSlice = createSlice({
       state.adding.raceJson = '';
       state.adding.horsesJson = [];
       state.opening.raceCard = null;
+      state.opening.sameCondition = [];
     },
     toOpen: (state, action: PayloadAction<number>) => {
       state.menu = 'open';
@@ -308,6 +310,7 @@ export const scraperSlice = createSlice({
       state.menu = 'add';
       state.targetId = NaN;
       state.opening.raceCard = null;
+      state.opening.sameCondition = [];
     },
     updateRaceJson: (state, action: PayloadAction<string>) => {
       state.adding.raceJson = action.payload;
