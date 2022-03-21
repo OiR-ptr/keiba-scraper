@@ -214,7 +214,7 @@ export function fetchRecordSameCondition(course: string, raceId: number) {
   const query = {
     query: 
     `query MyQuery {
-      RaceResult(where: {course: {_eq: "${course}"}, Horse: {Entries: {Race: {id: {_eq: ${raceId}}}}}}, order_by: {time: asc}) {
+      RaceResult(where: {course: {_eq: "${course}"}, Horse: {Entries: {Race: {id: {_eq: ${raceId}}}}}}, order_by: {time: asc, finish: asc}) {
         date
         weather
         baba
