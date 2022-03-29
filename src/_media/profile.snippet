@@ -1,6 +1,8 @@
-const horseName = [...document.querySelectorAll('div.horse_title > h1')].reduce((previous, value) => {
-    return previous+value.innerText;
-}, "").trim();
+const horseName = (() => {
+  const rg = new RegExp(/(.*) \|/);
+  const title = document.querySelector('head > title').innerText;
+  return rg.exec(title)[1];
+})();
 
 const horseSire = [...document.querySelectorAll('table.blood_table tr > td.b_ml')].reduce((previous, horseBlood) => {
   if(horseBlood?.nextElementSibling) previous['sire'] = horseBlood.innerText;
