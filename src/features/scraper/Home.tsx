@@ -6,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchCurrentRaces, selectRaces, toAdd, toOpen } from './scraperSlice';
 import { DeleteConfirm } from './DeleteConfirm';
+import { RaceCalender } from '../races/components/RaceCalender';
 
 export function Home() {
   const races = useAppSelector(selectRaces);
@@ -88,6 +89,7 @@ export function Home() {
           レースを登録
         </Button>
       </Box>
+      <RaceCalender />
       <DeleteConfirm 
         open={removeIt.id !== -1} 
         target={removeIt} 

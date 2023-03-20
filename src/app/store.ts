@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import scraperReducer from '../features/scraper/scraperSlice';
+import fetchRaceReducer from '../features/races/slice/FetchRaceSlice';
 
 export const store = configureStore({
   reducer: {
     scraper: scraperReducer,
+    fetchRace: fetchRaceReducer,
   },
 });
 
