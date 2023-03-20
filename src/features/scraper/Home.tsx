@@ -14,7 +14,7 @@ export function Home() {
   const [removeIt, setRemoveIt] = useState({ id: -1, name: '' });
 
   useEffect(() => {
-    dispatch(fetchCurrentRaces());
+    // dispatch(fetchCurrentRaces());
   }, []);
 
   function handleOpen(id: number) {

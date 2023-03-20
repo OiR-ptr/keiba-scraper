@@ -1,7 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import runSnippetGif from '../../_media/runSnippet.gif';
 import { selectAdding, updateRaceJson } from './scraperSlice';
 
 type Props = {
@@ -29,7 +28,7 @@ export function AddRaceJson(props: Props) {
   
   return (
     <Box sx={{ width: '100%' }}>
-      <img src={runSnippetGif} alt='sorry, please run list snippet and paste this page' />
+      <img src={''} alt='sorry, please run list snippet and paste this page' />
       <TextField
           error={hasJsonError}
           defaultValue={raceJson}
