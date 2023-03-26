@@ -38,8 +38,8 @@ const initialState: FetchRaceState = {
     test_flag: false,
 };
 
-export const fetchRaceSlice = createSlice({
-    name: 'fetchRace',
+export const raceSlice = createSlice({
+    name: 'race',
     initialState,
     reducers: {
 
@@ -50,8 +50,8 @@ export const fetchRaceSlice = createSlice({
 });
 
 export const {
-} = fetchRaceSlice.actions;
+} = raceSlice.actions;
 
-export const selectRegisteredDates = (state: RootState) => state.fetchRace.test_flag;
+export const selectRegisteredDates = (state: RootState) => state.raceSlice.test_flag;
 
-export default fetchRaceSlice.reducer;
+export default raceSlice.reducer;

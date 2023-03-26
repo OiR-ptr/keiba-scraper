@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectRegisteredDates } from '../slice/FetchRaceSlice';
+import { selectRegisteredDates } from '../slice/RaceSlice';
 
 export function RaceCalender() {
     const test_flag = useAppSelector(selectRegisteredDates);
