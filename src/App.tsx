@@ -1,13 +1,15 @@
 import React from 'react';
 import { Container } from '@mui/material';
-import { Scraper } from './features/scraper/Scraper';
+import { AppDrawer } from './pages/AppDrawer';
+import { Switch } from './features/Switch';
 
 function App() {
   return (
     <div>
       <main>
+        <AppDrawer />
         <Container maxWidth='xl'>
-          <Scraper />
+          <Switch />
         </Container>
       </main>
     </div>
