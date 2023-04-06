@@ -52,6 +52,6 @@ export const raceSlice = createSlice({
 export const {
 } = raceSlice.actions;
 
-export const selectRegisteredDates = (state: RootState) => state.raceSlice.test_flag;
+export const selectRegisteredDates = (state: RootState) => state.race.test_flag;
 
 export default raceSlice.reducer;
