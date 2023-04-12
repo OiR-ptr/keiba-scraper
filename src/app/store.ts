@@ -1,11 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import switchReducer from '../features/SwitchSlice';
 import scraperReducer from '../features/scraper/scraperSlice';
+import RaceReducer from '../features/races/slice/RaceSlice';
+
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    switch: switchReducer,
     scraper: scraperReducer,
+    race: RaceReducer,
   },
 });
 
